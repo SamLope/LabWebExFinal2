@@ -3,12 +3,12 @@ openapi: 3.0.3
 info:
   title: API de Produtos
   description: Produtos de Venda da Empresa X
-  termsOfService: http//swager.io/terms
+  termsOfService: http://swagger.io/terms
   contact:
     email: fatec@fatecfranca.edu.br
   license:
     name: Apache 2.0
-    url: http//swager.io/terms
+    url: http://swagger.io/terms
   version: 1.0.0
 
 servers:
@@ -17,6 +17,31 @@ servers:
 
 paths:
   /produtos:
+    get:
+      summary: Lista todos os produtos
+      parameters:
+        - name: categoria
+          in: query
+          description: Categoria do produto
+          required: false
+          schema:
+            type: string
+        - name: nome
+          in: query
+          description: Nome do produto
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoResponse"
+                
     post:
       summary: Cadastra novos produtos
       requestBody:
@@ -27,76 +52,223 @@ paths:
               $ref: "#/components/schemas/ProdutoRequest"
       responses:
         '201':
-          description: Sucesso cadastro produto
+          description: Sucesso no cadastro de produto
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProdutoResponse"
                 
-                
+  /produtos/{id}:
+    get:
+      summary: Obtém um produto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produto
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProdutoResponse"
+        '404':
+          description: Produto não encontrado
+
+    put:
+      summary: Atualiza os dados de um produto
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produto
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoRequest"
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProdutoResponse"
+        '404':
+          description: Produto não encontrado
+
+    delete:
+      summary: Deleta um produto
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produto
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Produto deletado com sucesso
+        '404':
+          description: Produto não encontrado
+
 components:
   schemas:
-    
     ProdutoRequest:
       type: object
       properties:
+        nome:
+          type: string
+          description: Nome do produto
+          example: "ProdutoExemplo"
         descricao:
           type: string
-          description: Descricao do produto
-          example: Geladeira
-          maxLength: 100
-          minLength: 5
-        preco: 
+          description: Descrição do produto
+          example: "Uma breve descrição do produto"
+        categoria:
+          type: string
+          description: Categoria do produto
+          example: "Eletrônicos"
+        marca:
+          type: string
+          description: Marca do produto
+          example: "MarcaExemplo"
+        preco:
           type: object
           properties:
             custo:
               type: number
               format: decimal
               example: 19.99
-              description: Preço custo produto
+              description: Preço custo do produto
             venda:
               type: number
               format: decimal
               example: 25.87
-              description: Preco de venda consumidor
-        categorias:
-          type: array
-          items:
-            type: string
-          example: ["A", "B"]
+              description: Preço de venda ao consumidor
+        quantidadeEstoque:
+          type: integer
+          example: 50
+        codigoBarras:
+          type: string
+          example: "7891234567890"
+        dimensoes:
+          type: object
+          properties:
+            altura:
+              type: number
+              example: 10
+            largura:
+              type: number
+              example: 20
+            profundidade:
+              type: number
+              example: 5
+            unidadeMedida:
+              type: string
+              example: "cm"
+        peso:
+          type: object
+          properties:
+            valor:
+              type: number
+              example: 1.5
+            unidadeMedida:
+              type: string
+              example: "kg"
+        status:
+          type: string
+          description: Status do produto
+          enum: ["ativo", "inativo"]
+          example: "ativo"
+        dataCadastro:
+          type: string
+          format: date-time
+          example: "2024-11-22T14:00:00Z"
       required:
+        - nome
         - descricao
-        - categorias
+        - categoria
         - preco
+        - quantidadeEstoque
+        - codigoBarras
 
     ProdutoResponse:
       type: object
       properties:
         id:
           type: integer
-          example: 29394
+          example: 12345
+        nome:
+          type: string
+          description: Nome do produto
+          example: "ProdutoExemplo"
         descricao:
           type: string
-          description: Descricao do produto
-          example: Geladeira
-          maxLength: 100
-          minLength: 5
-        preco: 
+          description: Descrição do produto
+          example: "Uma breve descrição do produto"
+        categoria:
+          type: string
+          description: Categoria do produto
+          example: "Eletrônicos"
+        marca:
+          type: string
+          description: Marca do produto
+          example: "MarcaExemplo"
+        preco:
           type: object
           properties:
             custo:
               type: number
               format: decimal
               example: 19.99
-              description: Preço custo produto
+              description: Preço custo do produto
             venda:
               type: number
               format: decimal
               example: 25.87
-              description: Preco de venda consumidor
-        categorias:
-          type: array
-          items:
-            type: string
-          example: ["A", "B"]
-    
+              description: Preço de venda ao consumidor
+        quantidadeEstoque:
+          type: integer
+          example: 50
+        codigoBarras:
+          type: string
+          example: "7891234567890"
+        dimensoes:
+          type: object
+          properties:
+            altura:
+              type: number
+              example: 10
+            largura:
+              type: number
+              example: 20
+            profundidade:
+              type: number
+              example: 5
+            unidadeMedida:
+              type: string
+              example: "cm"
+        peso:
+          type: object
+          properties:
+            valor:
+              type: number
+              example: 1.5
+            unidadeMedida:
+              type: string
+              example: "kg"
+        status:
+          type: string
+          enum: ["ativo", "inativo"]
+          example: "ativo"
+        dataCadastro:
+          type: string
+          format: date-time
+          example: "2024-11-22T14:00:00Z"
