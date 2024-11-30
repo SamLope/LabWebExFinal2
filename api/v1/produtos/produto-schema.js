@@ -2,86 +2,65 @@ const Joi = require("joi");
 
 const createProduto = {
     payload: Joi.object({
-        nome: Joi.string().min(3).max(100).required(),
-        descricao: Joi.string().min(5).max(255).required(),
-        categoria: Joi.string().min(3).max(50).required(),
-        marca: Joi.string().min(3).max(100).required(),
-        preco: Joi.object({
-            custo: Joi.number().precision(2).required(),
-            venda: Joi.number().precision(2).required(),
-        }).required(),
-        quantidadeEstoque: Joi.number().integer().min(0).required(),
-        codigoBarras: Joi.string().length(13).required(),
+        id: Joi.string().required(),
+        nome: Joi.string().min(3).required(),
+        descricao: Joi.string().optional(),
+        categoria: Joi.string().optional(),
+        marca: Joi.string().optional(),
+        preco: Joi.number().required(),
+        quantidadeEstoque: Joi.number().integer().required(),
+        codigoBarras: Joi.string().optional(),
         dimensoes: Joi.object({
-            altura: Joi.number().precision(2).required(),
-            largura: Joi.number().precision(2).required(),
-            profundidade: Joi.number().precision(2).required(),
-            unidadeMedida: Joi.string().valid("cm", "m", "mm").required(),
-        }).required(),
+            altura: Joi.number().required(),
+            largura: Joi.number().required(),
+            profundidade: Joi.number().required(),
+            unidadeMedida: Joi.string().valid('cm', 'm', 'mm').required(),
+        }).optional(),
         peso: Joi.object({
-            valor: Joi.number().precision(2).required(),
-            unidadeMedida: Joi.string().valid("kg", "g").required(),
-        }).required(),
-        status: Joi.string().valid("ativo", "inativo").default("ativo"),
-        dataCadastro: Joi.date().iso().required(),
-    })
+            valor: Joi.number().required(),
+            unidadeMedida: Joi.string().valid('kg', 'g').required(),
+        }).optional(),
+        status: Joi.string().valid('ativo', 'inativo').default('ativo'),
+        dataCadastro: Joi.date().optional(),
+    }),
 };
-
 
 const updateProduto = {
     payload: Joi.object({
-        nome: Joi.string().min(3).max(100),
-        descricao: Joi.string().min(5).max(255),
-        categoria: Joi.string().min(3).max(50),
-        marca: Joi.string().min(3).max(100),
-        preco: Joi.object({
-            custo: Joi.number().precision(2),
-            venda: Joi.number().precision(2),
-        }),
-        quantidadeEstoque: Joi.number().integer().min(0),
-        codigoBarras: Joi.string().length(13),
+        nome: Joi.string().min(3).optional(),
+        descricao: Joi.string().optional(),
+        categoria: Joi.string().optional(),
+        marca: Joi.string().optional(),
+        preco: Joi.number().optional(),
+        quantidadeEstoque: Joi.number().integer().optional(),
+        codigoBarras: Joi.string().optional(),
         dimensoes: Joi.object({
-            altura: Joi.number().precision(2),
-            largura: Joi.number().precision(2),
-            profundidade: Joi.number().precision(2),
-            unidadeMedida: Joi.string().valid("cm", "m", "mm"),
-        }),
+            altura: Joi.number().optional(),
+            largura: Joi.number().optional(),
+            profundidade: Joi.number().optional(),
+            unidadeMedida: Joi.string().valid('cm', 'm', 'mm').optional(),
+        }).optional(),
         peso: Joi.object({
-            valor: Joi.number().precision(2),
-            unidadeMedida: Joi.string().valid("kg", "g"),
-        }),
-        status: Joi.string().valid("ativo", "inativo"),
-        dataCadastro: Joi.date().iso(),
-    })
+            valor: Joi.number().optional(),
+            unidadeMedida: Joi.string().valid('kg', 'g').optional(),
+        }).optional(),
+        status: Joi.string().valid('ativo', 'inativo').optional(),
+        dataCadastro: Joi.date().optional(),
+    }),
 };
 
-
-const deleteProduto = {
+const consultaPorId = {
     params: Joi.object({
-        id: Joi.number().integer().positive().required(),
-    })
+        id: Joi.string().required(),
+    }),
 };
-
-
-const consultaProdutoPorId = {
-    params: Joi.object({
-        id: Joi.number().integer().positive().required(),
-    })
-};
-
 
 const consultarProdutos = {
     query: Joi.object({
-        categoria: Joi.string().min(3).max(50),
-        nome: Joi.string().min(3).max(100),
-        status: Joi.string().valid('ativo', 'inativo'),
-    })
+        nome: Joi.string().optional(),
+        categoria: Joi.string().optional(),
+        status: Joi.string().valid('ativo', 'inativo').default('ativo'),
+    }),
 };
 
-module.exports = {
-    createProduto,
-    updateProduto,
-    deleteProduto,
-    consultaProdutoPorId,
-    consultarProdutos
-};
+module.exports = { createProduto, updateProduto, consultaPorId, consultarProdutos };

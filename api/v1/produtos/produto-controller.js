@@ -1,55 +1,40 @@
-const ProdutoBusiness = require('./produto-business');
+const produtoBusiness = require("./produto-business");
 
-const criarProduto = async (req, res) => {
-    try{
-        const produto = await ProdutoBusiness.criarProduto(req.payload);
-        return res.response(produto).code(201);
-    } catch (error) {
-        return res.response({ error: error.message }).code(400);
+const getProdutos = async (request, h) => {
+    const result = await produtoBusiness.list(request.query);
+    return result;
+};
+
+const produtoPorId = async (request, h) => {
+    const idProduto = request.params.id;
+    const produtoProcurado = await produtoBusiness.list({ id: idProduto });
+    if (produtoProcurado && produtoProcurado.length > 0) {
+        return h.response(produtoProcurado[0]).code(200);
     }
+    return h.response().code(404);
 };
 
-const alterarProduto = async (req, res) => {
-    try{
-        const produto = await ProdutoBusiness.alterarProduto(req.params.id, req.payload);
-        return res.response(produto).code(200);
-    } catch (error) {
-        return res.response({ error: error.message }).code(400);
+const createProduto = async (request, h) => {
+    const result = await produtoBusiness.save(request.payload);
+    return h.response(result).code(201);
+};
+
+const updateProduto = async (request, h) => {
+    const idProduto = request.params.id;
+    const produtoAtualizado = await produtoBusiness.update(idProduto, request.payload);
+    if (produtoAtualizado) {
+        return h.response(produtoAtualizado).code(200);
     }
+    return h.response().code(404);
 };
 
-const excluirProduto = async (req, res) => {
-    try{
-        await ProdutoBusiness.excluirProduto(req.params.id);
-        return res.response().code(204);
-    } catch (error) {
-        return res.response({ error: error.message }).code(400);
-  }
-};
-
-const obterProdutoPorId = async (req, res) => {
-    try{
-        const produto = await ProdutoBusiness.obterProdutoPorId(req.params.id);
-        return res.response(produto).code(200);
-    } catch (error) {
-        return res.response({ error: 'Produto não encontrado' }).code(404);
-  }
-};
-
-const filtrarProdutos = async (req, res) => {
-    try {
-      const filtros = req.query;
-      const produtos = await ProdutoBusiness.filtrarProdutos(filtros);
-      return res.response(produtos).code(200);
-    } catch (error) {
-      return res.response({ error: error.message }).code(400);
+const deleteProduto = async (request, h) => {
+    const idProduto = request.params.id;
+    const produtoRemovido = await produtoBusiness.remove(idProduto);
+    if (produtoRemovido) {
+        return h.response().code(204);  
     }
-  };
+    return h.response().code(404);
+};
 
-  module.exports = {
-    criarProduto,
-    alterarProduto,
-    excluirProduto,
-    obterProdutoPorId,
-    filtrarProdutos
-  };
+module.exports = { getProdutos, createProduto, produtoPorId, updateProduto, deleteProduto };

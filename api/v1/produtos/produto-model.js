@@ -1,58 +1,61 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; 
+const Sequelize = require('sequelize');
+const database = require('../../../config/db');
 
-const Produto = sequelize.define('Produto', {
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  descricao: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  categoria: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  marca: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  preco: {
-    type: DataTypes.FLOAT,
-    allowNull: false
-  },
-  quantidadeEstoque: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  codigoBarras: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  dimensoes: {
-    type: DataTypes.JSONB,
-    allowNull: true
-  },
-  peso: {
-    type: DataTypes.JSONB,
-    allowNull: true
-  },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  dataCadastro: {
-    type: DataTypes.DATE,
-    allowNull: false
-  }
+const Produto = database.sequelize.define('Produto', {
+    id: {
+        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false,
+    },
+    nome: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    descricao: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    categoria: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    marca: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    preco: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+    },
+    quantidadeEstoque: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    codigoBarras: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    dimensoes: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+    },
+    peso: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+    },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'ativo',
+    },
+    dataCadastro: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: Sequelize.NOW,
+    },
 }, {
-  timestamps: false 
+    tableName: 'produto',
+    timestamps: false,  
 });
 
-module.exports = Produto;
+module.exports = { Produto };

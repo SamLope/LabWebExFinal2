@@ -1,48 +1,53 @@
-const Joi = require("joi");
 const produtoController = require("./produto-controller");
 const produtoSchema = require("./produto-schema");
+
+const baseVersion = '/v1';
 
 const routes = [
     {
         method: "POST",
-        path: "/produtos",
-        handler: produtoController.createProduto,
+        path: `${baseVersion}/produtos`,
         options: {
-            validate: produtoSchema.createProduto
-        }
+            handler: produtoController.createProduto,
+            validate: produtoSchema.createProduto,
+        },
     },
+
     {
         method: "PUT",
-        path: "/produtos/{id}",
-        handler: produtoController.updateProduto,
+        path: `${baseVersion}/produtos/{id}`,
         options: {
-            validate: produtoSchema.updateProduto
-        }
+            handler: produtoController.updateProduto,
+            validate: produtoSchema.updateProduto,
+        },
     },
+
     {
         method: "DELETE",
-        path: "/produtos/{id}",
-        handler: produtoController.deleteProduto,
+        path: `${baseVersion}/produtos/{id}`,
         options: {
-            validate: produtoSchema.deleteProduto
-        }
+            handler: produtoController.deleteProduto,
+            validate: produtoSchema.consultaPorId, 
+        },
     },
+
     {
         method: "GET",
-        path: "/produtos/{id}",
-        handler: produtoController.getProdutoById,
+        path: `${baseVersion}/produtos/{id}`,
         options: {
-            validate: produtoSchema.consultaProdutoPorId
-        }
+            handler: produtoController.produtoPorId,
+            validate: produtoSchema.consultaPorId,
+        },
     },
+
     {
         method: "GET",
-        path: "/produtos",
-        handler: produtoController.getProdutos,
+        path: `${baseVersion}/produtos`,
         options: {
-            validate: produtoSchema.consultarProdutos
-        }
-    }
+            handler: produtoController.getProdutos,
+            validate: produtoSchema.consultarProdutos,
+        },
+    },
 ];
 
 module.exports = routes;
