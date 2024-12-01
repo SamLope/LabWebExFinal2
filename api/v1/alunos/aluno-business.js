@@ -9,10 +9,20 @@ const save = async (aluno) => {
 }
 
 
-const list = async(filters) => {
-
-    
-    return await alunoModel.Aluno.findAll();
+const list = async (filters) => {
+    const where = {};
+    if (filters.nome) {
+        where.nome = { [Sequelize.Op.like]: `%${filters.nome}%` };
+    }
+    if (filters.idade) {
+        where.idade = filters.idade;
+    }
+    return await alunoModel.Aluno.findAll({ where });
 }
 
-module.exports = {save, list};
+const findById = async (id) => {
+    return await alunoModel.Aluno.findOne({ where: { id } });
+}
+
+module.exports = { save, list, findById };
+

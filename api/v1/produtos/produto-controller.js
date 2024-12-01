@@ -7,9 +7,9 @@ const getProdutos = async (request, h) => {
 
 const produtoPorId = async (request, h) => {
     const idProduto = request.params.id;
-    const produtoProcurado = await produtoBusiness.list({ id: idProduto });
-    if (produtoProcurado && produtoProcurado.length > 0) {
-        return h.response(produtoProcurado[0]).code(200);
+    const produto = await produtoBusiness.findById(idProduto);
+    if (produto) {
+        return h.response(produto).code(200);
     }
     return h.response().code(404);
 };
@@ -36,5 +36,7 @@ const deleteProduto = async (request, h) => {
     }
     return h.response().code(404);
 };
+
+
 
 module.exports = { getProdutos, createProduto, produtoPorId, updateProduto, deleteProduto };

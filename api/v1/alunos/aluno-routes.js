@@ -15,7 +15,7 @@ const routes = [
     },
     {
         method: "GET",
-        path: `${baseVersion}/alunos{id}`,
+        path: `${baseVersion}/alunos/{id}`,
         options: {
             handler: alunoController.alunoPorId,
             validate: alunoSchema.consultaPorId

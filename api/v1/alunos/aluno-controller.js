@@ -10,14 +10,11 @@ const getAlunos = async (request, h) => {
 }
 
 const alunoPorId = async (request, h) => {
-
     const idAluno = request.params.id;
-    
-    const alunoProcurado = listaAlunos.find(aluno => aluno.id == idAluno);
-    if(alunoProcurado) {
-        return h.response(alunoProcurado).code(200);
-    } 
-
+    const aluno = await alunoBusiness.findById(idAluno); 
+    if (aluno) {
+        return h.response(aluno).code(200);
+    }
     return h.response().code(404);
 }
 

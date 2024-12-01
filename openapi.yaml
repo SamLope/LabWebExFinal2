@@ -12,8 +12,8 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://sistema-compass-homolog.com.br
-  - url: https://sistema-compass.com.br
+  - url: http://localhost:5005
+  
 
 paths:
   /produtos:

@@ -8,10 +8,21 @@ const sequelizeConfig = {
     logging: console.log
 };
 
-//database, usuario, senha
-const sequelize = new Sequelize(envConfig.database.name, 
-                                envConfig.database.user,
-                                envConfig.database.password, 
-                                sequelizeConfig);
 
-module.exports = {sequelize};
+
+const sequelize = new Sequelize(
+    envConfig.database.name,
+    envConfig.database.user,
+    envConfig.database.password, 
+    sequelizeConfig
+);
+
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
+
+module.exports = { sequelize };
